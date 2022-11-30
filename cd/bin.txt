@@ -1,0 +1,199 @@
+11111111111111111111111111
+
+
+%{
+#include <stdio.h>
+#include <string.h>
+
+char* longest;
+%}
+
+longest     [a-zA-Z]{8,}
+
+%%
+
+{longest}   {
+            if (yyleng > strlen(longest)) {
+                longest = (char*)realloc(longest, yyleng + 1);
+                strcpy(longest, yytext);
+            }
+        }
+<*>.|\n     /* skip all unrecognized text */
+
+%%
+
+void revstr(char *str1) {   
+    static int i, len, temp;  
+    len = strlen(str1);  
+      
+    if (i < len/2){    
+        temp = str1[i];  
+        str1[i] = str1[len - i - 1];  
+        str1[len - i - 1] = temp;  
+        i++;  
+        revstr(str1);  
+    }  
+} 
+
+
+int main() {
+    longest = (char*)malloc(1);
+    longest[0] = '\0';
+    yylex();
+    printf("Longest string is '%s'\n", longest);
+    //strrev(longest);
+    revstr(longest);
+    printf("Longest reverse string is '%s'\n", longest);
+    free(longest);
+    return 0;
+}
+
+
+222222222222222
+
+lower [a-z]
+CAPS  [A-Z]
+space    [ \t\n]
+
+%%
+{lower}         {printf("%c",yytext[0]- 32);}
+{CAPS}        {printf("%c",yytext[0]+ 32);}
+{space}        ECHO;
+.                    ECHO;
+%%
+
+int main()
+{
+    yylex();
+   
+}
+
+
+3333333333333333333333333333
+
+
+%{ 
+
+    int vow_count=0; 
+
+    int const_count =0; 
+%} 
+
+  
+%% 
+[aeiouAEIOU] {vow_count++;} 
+[a-zA-Z] {const_count++;} 
+%% 
+
+int yywrap(){} 
+
+int main() 
+{ 
+
+    printf("Enter the string of vowels and consonents:"); 
+
+    yylex(); 
+
+    printf("Number of vowels are:  %d\n", vow_count); 
+
+    printf("Number of consonants are:  %d\n", const_count); 
+
+    return 0; 
+}  
+
+
+
+4444444444444444444444444444444444444
+
+
+%{ 
+  int flag = 0;
+%} 
+
+%% 
+[a-z.0-9_]+@+[a-z]+".com"|".in" {flag = 1;}
+%%
+
+int main() { 
+
+  yylex(); 
+
+  if (flag == 1) 
+
+    printf("Accepted\n"); 
+
+  else
+
+    printf("Not Accepted\n"); 
+}
+
+
+555555555555555555555555555555555555
+
+
+%{
+#include<stdio.h>
+void check(char *);
+%}
+
+%%
+[a-zA-Z]+ check(yytext);
+%%
+
+int main()
+{
+    yylex();
+    return 0;
+}
+
+void check(char *str)
+{
+    FILE *fp;
+    char temp[30];
+    fp = fopen("input.txt","r");
+    while ((fscanf(fp,"%s",temp))!=EOF)
+    {
+        if(!(strcmp(temp,str)))
+        {
+            printf("FOUND");
+            return;
+        }
+        printf("NOT FOUND");
+        return;
+    }
+}
+
+
+6666666666666666666666666666666666
+
+
+%{ 
+    int postiveno=0; 
+    int negtiveno=0; 
+    int positivefractions=0; 
+    int negativefractions=0; 
+%} 
+
+
+DIGIT [0-9] 
+%%   
+\+?{DIGIT}+ {postiveno++;} 
+-{DIGIT}+ {negtiveno++;} 
+
+  
+\+?{DIGIT}*\.{DIGIT}+ {positivefractions++;} 
+-{DIGIT}*\.{DIGIT}+ {negativefractions++;} 
+. ;    
+%%  
+
+int main(){ 
+    yylex(); 
+    printf("\nNo. of positive numbers: %d", postiveno); 
+    printf("\nNo. of Negative numbers: %d", negtiveno); 
+    printf("\nNo. of Positive numbers in fractions: %d", positivefractions); 
+    printf("\nNo. of Negative numbers in fractions: %d\n", negativefractions); 
+    return 0; 
+}
+
+
+
